@@ -3,7 +3,7 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </div>
-  <router-view/>
+  <router-view />
 </template>
 
 <style lang="scss">
@@ -26,5 +26,9 @@
       color: #42b983;
     }
   }
+}
+
+p {
+  margin: 0;
 }
 </style>
