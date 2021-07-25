@@ -1,9 +1,5 @@
-<template>
-  <slot class="dnd-draggable" draggable="true" @dragstart="onDragStart" @drag="onDrag" @dragend="onDragEnd"></slot>
-</template>
-
 <script lang="ts">
-import { defineComponent, getCurrentInstance, Slots } from 'vue';
+import { defineComponent, getCurrentInstance, Slots, Slot, h } from 'vue';
 import { DragAndDropStore, SafeDragEvent } from '@/plugins/DragAndDrop';
 
 export default defineComponent({
@@ -11,41 +7,48 @@ export default defineComponent({
   setup(props, { slots }: { slots: Slots }) {
     const store = getCurrentInstance()?.appContext.config.globalProperties.$dragAndDropStore as DragAndDropStore;
 
-    console.log(slots);
-
-    const onDragStart = (e: SafeDragEvent) => {
+    const dragStart = (e: SafeDragEvent) => {
       console.log('drg start');
       store.dropZoneCounter = 0;
       store.currentDraggable = e.target;
     };
 
-    const onDrag = () => {
+    const drag = () => {
       if (store.currentDraggable) {
         store.currentDraggable.classList.add('dnd-dragging');
       }
     };
 
-    const onDragEnd = () => {
+    const dragEnd = () => {
       if (store.currentDraggable) {
         store.currentDraggable.classList.remove('dnd-dragging');
         store.currentDraggable = null;
       }
     };
 
-    if (slots !== undefined && slots.default !== undefined) slots.default()[0].props.draggable = true;
-
-    return {
-      onDragStart,
-      onDrag,
-      onDragEnd
-    };
+    const defaultSlot = slots.default as Slot;
+    return () =>
+      h(defaultSlot()[0], {
+        class: 'dnd-draggable',
+        draggable: true,
+        ondragstart: dragStart,
+        ondrag: drag,
+        ondragend: dragEnd
+      });
   }
 });
 </script>
 
-<style>
+<style lang="scss">
 .dnd-draggable {
-  width: 100%;
-  height: 100%;
+  cursor: pointer;
+  background: beige;
+
+  &.dnd-dragging {
+    background: #505050;
+    & > * {
+      visibility: hidden;
+    }
+  }
 }
 </style>

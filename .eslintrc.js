@@ -13,6 +13,8 @@ module.exports = {
     'max-len': ['warn', { code: 140 }],
     'no-plusplus': 'off',
     'comma-dangle': 'off',
+    'implicit-arrow-linebreak': 'off',
+    'object-curly-newline': 'off',
     'vue/singleline-html-element-content-newline': 'off',
     'vue/max-attributes-per-line': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off'

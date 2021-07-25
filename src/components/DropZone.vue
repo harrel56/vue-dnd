@@ -1,15 +1,10 @@
-<template>
-  <div class="dnd-dropzone" @dragenter="onDragEnter" @dragleave="onDragLeave" @drop="onDrop" @dragover.prevent>
-    <slot></slot>
-  </div>
-</template>
 <script lang="ts">
-import { defineComponent, getCurrentInstance } from 'vue';
+import { defineComponent, getCurrentInstance, Slots, Slot, h } from 'vue';
 import { DragAndDropStore, SafeDragEvent } from '@/plugins/DragAndDrop';
 
 export default defineComponent({
   name: 'DropZone',
-  setup() {
+  setup(props, { slots }: { slots: Slots }) {
     const store = getCurrentInstance()?.appContext.config.globalProperties.$dragAndDropStore as DragAndDropStore;
 
     const onDragEnter = (e: SafeDragEvent) => {
@@ -63,18 +58,38 @@ export default defineComponent({
       }
     };
 
-    return {
-      onDragEnter,
-      onDragLeave,
-      onDrop
+    const onDragOver = (e: SafeDragEvent) => {
+      e.preventDefault();
     };
+
+    const defaultSlot = slots.default as Slot;
+    return () =>
+      h(defaultSlot()[0], {
+        class: 'dnd-dropzone',
+        ondragenter: onDragEnter,
+        ondragleave: onDragLeave,
+        ondrop: onDrop,
+        ondragover: onDragOver
+      });
   }
 });
 </script>
 
-<style>
-/*.dnd-dropzone {*/
-/*  width: 100%;*/
-/*  height: 100%;*/
-/*}*/
+<style lang="scss">
+.dnd-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 220px;
+  min-height: 85vh;
+  gap: 20px;
+  background: gray;
+  padding: 10px;
+  border-radius: 5px;
+
+  &.dnd-dropping {
+    background: #505050;
+    outline: dashed black;
+  }
+}
 </style>
