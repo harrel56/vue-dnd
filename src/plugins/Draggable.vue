@@ -8,7 +8,6 @@ export default defineComponent({
     const store = getCurrentInstance()?.appContext.config.globalProperties.$dragAndDropStore as DragAndDropStore;
 
     const dragStart = (e: SafeDragEvent) => {
-      console.log('drg start');
       store.dropZoneCounter = 0;
       store.currentDraggable = e.target;
     };

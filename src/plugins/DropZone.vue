@@ -22,8 +22,6 @@ export default defineComponent({
         dropZone.classList.add('dnd-dropping');
       } else if (e.target !== dropZone) {
         const children = Array.from(dropZone.children);
-        console.log(e.target);
-        console.log(dropZone);
         const swapChild = e.target.closest('.dnd-draggable')!;
 
         if (children.indexOf(store.currentDraggable) > children.indexOf(swapChild)) {

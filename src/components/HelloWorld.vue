@@ -15,8 +15,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Draggable from '@/components/Draggable.vue';
-import DropZone from '@/components/DropZone.vue';
+import Draggable from '@/plugins/Draggable.vue';
+import DropZone from '@/plugins/DropZone.vue';
 
 export default defineComponent({
   name: 'HelloWorld',
