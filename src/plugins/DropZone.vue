@@ -5,6 +5,11 @@ import { DragAndDropStore, SafeDragEvent } from '@/plugins/DragAndDrop';
 export default defineComponent({
   name: 'DropZone',
   setup(props, { slots }: { slots: Slots }) {
+    if (slots.default == null) {
+      console.error('DropZone component cannot be used without a default slot');
+      return () => null;
+    }
+
     const store = getCurrentInstance()?.appContext.config.globalProperties.$dragAndDropStore as DragAndDropStore;
 
     const onDragEnter = (e: SafeDragEvent) => {

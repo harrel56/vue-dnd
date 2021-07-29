@@ -5,6 +5,11 @@ import { DragAndDropStore, SafeDragEvent } from '@/plugins/DragAndDrop';
 export default defineComponent({
   name: 'Draggable',
   setup(props, { slots }: { slots: Slots }) {
+    if (slots.default == null) {
+      console.error('Draggable component cannot be used without a default slot');
+      return () => null;
+    }
+
     const store = getCurrentInstance()?.appContext.config.globalProperties.$dragAndDropStore as DragAndDropStore;
 
     const dragStart = (e: SafeDragEvent) => {
