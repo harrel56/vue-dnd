@@ -1,4 +1,4 @@
-[![codecov](https://codecov.io/gh/harrel56/vuela/branch/master/graph/badge.svg?token=82DE91AQ1Z)](https://codecov.io/gh/harrel56/vuela)
+[![codecov](https://codecov.io/gh/harrel56/vuela/branch/master/graph/badge.svg?token=82DE91AQ1Z)](https://codecov.io/gh/harrel56/vuela) [![Build Status](https://travis-ci.com/harrel56/vuela.svg?branch=master)](https://travis-ci.com/harrel56/vuela)
 
 # vuela
 
