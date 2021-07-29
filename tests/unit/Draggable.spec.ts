@@ -10,6 +10,11 @@ const setupDraggable = () =>
   });
 
 describe('Draggable.vue', () => {
+  it('contains class from plugin', () => {
+    const wrapper = setupDraggable();
+    expect(wrapper.get('div').classes()).toContain('dnd-draggable');
+  });
+
   it('contains draggable = true', () => {
     const wrapper = setupDraggable();
     expect(wrapper.get('div').element.draggable).toBeTruthy();
@@ -22,12 +27,12 @@ describe('Draggable.vue', () => {
 
   it('adds and removes dragging class', async () => {
     const wrapper = setupDraggable();
-    await wrapper.get('div').trigger('dragstart', { clientX: 0, clientY: 0 });
-    await wrapper.get('div').trigger('drag', { clientX: 0, clientY: 1 });
-    console.log(wrapper.html());
-    expect(wrapper.get('div').classes()).toContain('dnd-dragging');
+    const div = wrapper.get('div');
+    await div.trigger('dragstart', { clientX: 0, clientY: 0 });
+    await div.trigger('drag', { clientX: 0, clientY: 1 });
+    expect(div.classes()).toContain('dnd-dragging');
 
-    await wrapper.get('div').trigger('dragend', { clientX: 0, clientY: 1 });
-    expect(wrapper.get('div').classes()).not.toContain('dnd-dragging');
+    await div.trigger('dragend', { clientX: 0, clientY: 1 });
+    expect(div.classes()).not.toContain('dnd-dragging');
   });
 });

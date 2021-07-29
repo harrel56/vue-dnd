@@ -7,7 +7,7 @@ import { defineComponent } from 'vue';
 import Draggable from '@/plugins/Draggable.vue';
 
 export default defineComponent({
-  name: 'DraggableContainer',
+  name: 'DraggableStub',
   components: { Draggable }
 });
 </script>
