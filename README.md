@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/harrel56/vuela/branch/master/graph/badge.svg?token=82DE91AQ1Z)](https://codecov.io/gh/harrel56/vuela)
+
 # vuela
 
 ## Project setup
