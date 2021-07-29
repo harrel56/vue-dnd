@@ -1,0 +1,19 @@
+codecov:
+  token: "c6072e71-7447-466e-a7be-2e8a67a1e0c3"
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: no
+      macro: no
+
+comment:
+  layout: "reach,diff,flags,files,footer"
+  behavior: default
