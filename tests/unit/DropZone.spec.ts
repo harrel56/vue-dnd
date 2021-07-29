@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import DragAndDrop from '@/plugins/DragAndDrop';
+import DragAndDrop, { classNames } from '@/plugins/DragAndDrop';
 import DropZone from '@/plugins/DropZone.vue';
 
 const DropZoneStub = {
@@ -25,7 +25,7 @@ describe('DropZone.vue', () => {
 
   it('contains class from plugin', () => {
     const wrapper = setupDropZone(DropZoneStub);
-    expect(wrapper.get('div').classes()).toContain('dnd-dropzone');
+    expect(wrapper.get('div').classes()).toContain(classNames.DROP_ZONE);
   });
 
   it('contains class from template', () => {

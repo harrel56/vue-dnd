@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import DragAndDrop from '@/plugins/DragAndDrop';
+import DragAndDrop, { classNames } from '@/plugins/DragAndDrop';
 import Draggable from '@/plugins/Draggable.vue';
 
 const DraggableStub = {
@@ -25,7 +25,7 @@ describe('Draggable.vue', () => {
 
   it('contains class from plugin', () => {
     const wrapper = setupDraggable(DraggableStub);
-    expect(wrapper.get('div').classes()).toContain('dnd-draggable');
+    expect(wrapper.get('div').classes()).toContain(classNames.DRAGGABLE);
   });
 
   it('contains draggable = true', () => {
@@ -43,10 +43,10 @@ describe('Draggable.vue', () => {
     const div = wrapper.get('div');
     await div.trigger('dragstart', { clientX: 0, clientY: 0 });
     await div.trigger('drag', { clientX: 0, clientY: 1 });
-    expect(div.classes()).toContain('dnd-dragging');
+    expect(div.classes()).toContain(classNames.DRAGGING);
 
     await div.trigger('dragend', { clientX: 0, clientY: 1 });
-    expect(div.classes()).not.toContain('dnd-dragging');
+    expect(div.classes()).not.toContain(classNames.DRAGGING);
   });
 
   it('fails when no default slot provided', () => {

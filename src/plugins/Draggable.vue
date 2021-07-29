@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, getCurrentInstance, Slots, Slot, h } from 'vue';
-import { DragAndDropStore, SafeDragEvent } from '@/plugins/DragAndDrop';
+import { DragAndDropStore, SafeDragEvent, classNames } from '@/plugins/DragAndDrop';
 
 export default defineComponent({
   name: 'Draggable',
@@ -19,13 +19,13 @@ export default defineComponent({
 
     const drag = () => {
       if (store.currentDraggable) {
-        store.currentDraggable.classList.add('dnd-dragging');
+        store.currentDraggable.classList.add(classNames.DRAGGING);
       }
     };
 
     const dragEnd = () => {
       if (store.currentDraggable) {
-        store.currentDraggable.classList.remove('dnd-dragging');
+        store.currentDraggable.classList.remove(classNames.DRAGGING);
         store.currentDraggable = null;
       }
     };
@@ -33,7 +33,7 @@ export default defineComponent({
     const defaultSlot = slots.default as Slot;
     return () =>
       h(defaultSlot()[0], {
-        class: 'dnd-draggable',
+        class: classNames.DRAGGABLE,
         draggable: true,
         ondragstart: dragStart,
         ondrag: drag,

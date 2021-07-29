@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, getCurrentInstance, Slots, Slot, h } from 'vue';
-import { DragAndDropStore, SafeDragEvent } from '@/plugins/DragAndDrop';
+import { DragAndDropStore, SafeDragEvent, classNames } from '@/plugins/DragAndDrop';
 
 export default defineComponent({
   name: 'DropZone',
@@ -17,17 +17,17 @@ export default defineComponent({
         return;
       }
 
-      const dropZone = e.target.closest('.dnd-dropzone');
+      const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`);
       if (!dropZone) {
         return;
       }
 
       store.dropZoneCounter++;
-      if (store.currentDraggable.closest('.dnd-dropzone') !== dropZone) {
-        dropZone.classList.add('dnd-dropping');
+      if (store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
+        dropZone.classList.add(classNames.DROPPING);
       } else if (e.target !== dropZone) {
         const children = Array.from(dropZone.children);
-        const swapChild = e.target.closest('.dnd-draggable')!;
+        const swapChild = e.target.closest(`.${classNames.DRAGGABLE}`)!;
 
         if (children.indexOf(store.currentDraggable) > children.indexOf(swapChild)) {
           swapChild.before(store.currentDraggable);
@@ -43,9 +43,9 @@ export default defineComponent({
       }
 
       store.dropZoneCounter--;
-      const dropZone = e.target.closest('.dnd-dropzone');
-      if (dropZone && store.currentDraggable.closest('.dnd-dropzone') !== dropZone && store.dropZoneCounter === 0) {
-        dropZone.classList.remove('dnd-dropping');
+      const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`);
+      if (dropZone && store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone && store.dropZoneCounter === 0) {
+        dropZone.classList.remove(classNames.DROPPING);
       }
     };
 
@@ -54,10 +54,10 @@ export default defineComponent({
         return;
       }
 
-      const dropZone = e.target.closest('.dnd-dropzone');
-      if (dropZone && store.currentDraggable.closest('.dnd-dropzone') !== dropZone) {
+      const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`);
+      if (dropZone && store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
         dropZone.append(store.currentDraggable);
-        dropZone.classList.remove('dnd-dropping');
+        dropZone.classList.remove(classNames.DROPPING);
       }
     };
 
@@ -68,7 +68,7 @@ export default defineComponent({
     const defaultSlot = slots.default as Slot;
     return () =>
       h(defaultSlot()[0], {
-        class: 'dnd-dropzone',
+        class: classNames.DROP_ZONE,
         ondragenter: onDragEnter,
         ondragleave: onDragLeave,
         ondrop: onDrop,
