@@ -41,11 +41,11 @@ describe('Draggable.vue', () => {
   it('adds and removes dragging class', async () => {
     const wrapper = setupDraggable(DraggableStub);
     const div = wrapper.get('div');
-    await div.trigger('dragstart', { clientX: 0, clientY: 0 });
-    await div.trigger('drag', { clientX: 0, clientY: 1 });
+    await div.trigger('dragstart');
+    await div.trigger('drag');
     expect(div.classes()).toContain(classNames.DRAGGING);
 
-    await div.trigger('dragend', { clientX: 0, clientY: 1 });
+    await div.trigger('dragend');
     expect(div.classes()).not.toContain(classNames.DRAGGING);
   });
 
