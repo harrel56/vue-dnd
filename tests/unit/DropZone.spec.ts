@@ -28,6 +28,16 @@ const ComplexStub = defineComponent({
               </div></DropZone>`
 });
 
+const DropZoneWithStaticElement = defineComponent({
+  components: { DropZone, Draggable },
+  template: ` <DropZone><div class="z1">
+                <h2>Hello</h2>
+                <Draggable><div class="d1"></div></Draggable>
+                <Draggable><div class="d2"></div></Draggable>
+                <Draggable><div class="d3"></div></Draggable>
+              </div></DropZone>`
+});
+
 type ComponentType = typeof DropZoneStub;
 
 const setupDropZone = (component: ComponentType) =>
@@ -136,5 +146,24 @@ describe('DropZone.vue', () => {
     expect(dropzone2.classes()).not.toContain(classNames.DROPPING);
     expect(dropzone2.findAll('*').length).toBe(3);
     expect(dropzone2.find(':last-child').classes()).toContain('d1');
+  });
+
+  it('does not fail on static elements (non-draggables)', async () => {
+    const wrapper = setupDropZone(DropZoneWithStaticElement);
+    const dropzone1 = wrapper.get('.z1');
+    const draggable1 = wrapper.get('.z1 .d1');
+    const header = wrapper.get('.z1 h2');
+
+    const errorCount = errors.length;
+    await draggable1.trigger('dragstart');
+    await draggable1.trigger('drag');
+    await header.trigger('dragenter');
+    expect(errors.length).toBe(errorCount);
+
+    await header.trigger('drop');
+    expect(dropzone1.find(':first-child').element.tagName).toBe('H2');
+    expect(dropzone1.find(':nth-child(2)').classes()).toContain('d1');
+    expect(dropzone1.find(':nth-child(3)').classes()).toContain('d2');
+    expect(dropzone1.find(':last-child').classes()).toContain('d3');
   });
 });
