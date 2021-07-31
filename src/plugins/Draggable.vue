@@ -4,12 +4,19 @@ import { DragAndDropStore, SafeDragEvent, classNames } from '@/plugins/DragAndDr
 
 export default defineComponent({
   name: 'Draggable',
+  props: {
+    draggingClass: {
+      type: String,
+      default: null
+    }
+  },
   setup(props, { slots }: { slots: Slots }) {
     if (slots.default == null) {
       console.error('Draggable component cannot be used without a default slot');
       return () => null;
     }
 
+    const draggingClasses = props.draggingClass == null ? [classNames.DRAGGING] : [classNames.DRAGGING, props.draggingClass];
     const store = getCurrentInstance()?.appContext.config.globalProperties.$dragAndDropStore as DragAndDropStore;
 
     const dragStart = (e: SafeDragEvent) => {
@@ -19,13 +26,13 @@ export default defineComponent({
 
     const drag = () => {
       if (store.currentDraggable) {
-        store.currentDraggable.classList.add(classNames.DRAGGING);
+        store.currentDraggable.classList.add(...draggingClasses);
       }
     };
 
     const dragEnd = () => {
       if (store.currentDraggable) {
-        store.currentDraggable.classList.remove(classNames.DRAGGING);
+        store.currentDraggable.classList.remove(...draggingClasses);
         store.currentDraggable = null;
       }
     };

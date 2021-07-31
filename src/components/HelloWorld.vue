@@ -1,10 +1,10 @@
 <template>
   <div class="flex">
-    <DropZone v-for="column in columns" :key="column.title">
+    <DropZone v-for="column in columns" :key="column.title" dropping-class="my-dropping">
       <div class="dropzone">
         <h2>{{ column.title }}</h2>
-        <Draggable v-for="element in column.elements" :key="element">
-          <div class="draggable-wrapper">
+        <Draggable v-for="element in column.elements" :key="element" dragging-class="my-dragging">
+          <div class="draggable">
             <p>{{ element }}</p>
           </div>
         </Draggable>
@@ -45,7 +45,7 @@ export default defineComponent({
   padding: 30px;
 }
 
-.draggable-wrapper {
+.draggable {
   width: 200px;
   height: 100px;
 }

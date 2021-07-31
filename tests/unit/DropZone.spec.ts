@@ -22,7 +22,7 @@ const ComplexStub = defineComponent({
                 <Draggable><div class="d2"></div></Draggable>
                 <Draggable><div class="d3"></div></Draggable>
               </div></DropZone>
-              <DropZone><div class="z2">
+              <DropZone dropping-class="test-dropping"><div class="z2">
                 <Draggable><div class="d1"></div></Draggable>
                 <Draggable><div class="d2"></div></Draggable>
               </div></DropZone>`
@@ -84,6 +84,20 @@ describe('DropZone.vue', () => {
 
     await dropzone2.trigger('dragleave');
     expect(dropzone2.classes()).not.toContain(classNames.DROPPING);
+  });
+
+  it('adds and removes dropping class from props', async () => {
+    const wrapper = setupDropZone(ComplexStub);
+    const dropzone2 = wrapper.get('.z2');
+    const draggable1 = wrapper.get('.z1 .d1');
+
+    await draggable1.trigger('dragstart');
+    await draggable1.trigger('drag');
+    await dropzone2.trigger('dragenter');
+    expect(dropzone2.classes()).toContain('test-dropping');
+
+    await dropzone2.trigger('dragleave');
+    expect(dropzone2.classes()).not.toContain('test-dropping');
   });
 
   it('calculates drop position correctly', async () => {

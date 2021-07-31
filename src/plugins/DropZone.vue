@@ -4,12 +4,18 @@ import { DragAndDropStore, SafeDragEvent, classNames } from '@/plugins/DragAndDr
 
 export default defineComponent({
   name: 'DropZone',
+  props: {
+    droppingClass: {
+      type: String,
+      default: null
+    }
+  },
   setup(props, { slots }: { slots: Slots }) {
     if (slots.default == null) {
       console.error('DropZone component cannot be used without a default slot');
       return () => null;
     }
-
+    const droppingClasses = props.droppingClass == null ? [classNames.DROPPING] : [classNames.DROPPING, props.droppingClass];
     const store = getCurrentInstance()?.appContext.config.globalProperties.$dragAndDropStore as DragAndDropStore;
 
     const onDragEnter = (e: SafeDragEvent) => {
@@ -24,11 +30,14 @@ export default defineComponent({
 
       store.dropZoneCounter++;
       if (store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
-        dropZone.classList.add(classNames.DROPPING);
+        dropZone.classList.add(...droppingClasses);
       } else if (e.target !== dropZone) {
-        const children = Array.from(dropZone.children);
         const swapChild = e.target.closest(`.${classNames.DRAGGABLE}`)!;
+        if (!swapChild) {
+          return;
+        }
 
+        const children = Array.from(dropZone.children);
         if (children.indexOf(store.currentDraggable) > children.indexOf(swapChild)) {
           swapChild.before(store.currentDraggable);
         } else {
@@ -45,7 +54,7 @@ export default defineComponent({
       store.dropZoneCounter--;
       const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`);
       if (dropZone && store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone && store.dropZoneCounter === 0) {
-        dropZone.classList.remove(classNames.DROPPING);
+        dropZone.classList.remove(...droppingClasses);
       }
     };
 
@@ -57,7 +66,7 @@ export default defineComponent({
       const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`);
       if (dropZone && store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
         dropZone.append(store.currentDraggable);
-        dropZone.classList.remove(classNames.DROPPING);
+        dropZone.classList.remove(...droppingClasses);
       }
     };
 

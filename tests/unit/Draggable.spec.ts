@@ -4,7 +4,7 @@ import Draggable from '@/plugins/Draggable.vue';
 
 const DraggableStub = {
   components: { Draggable },
-  template: '<Draggable><div class="test-class">drag</div></Draggable>'
+  template: '<Draggable dragging-class="test-dragging"><div class="test-class">drag</div></Draggable>'
 };
 
 const EmptyDraggableStub = {
@@ -47,6 +47,17 @@ describe('Draggable.vue', () => {
 
     await div.trigger('dragend');
     expect(div.classes()).not.toContain(classNames.DRAGGING);
+  });
+
+  it('adds and removes dragging class', async () => {
+    const wrapper = setupDraggable(DraggableStub);
+    const div = wrapper.get('div');
+    await div.trigger('dragstart');
+    await div.trigger('drag');
+    expect(div.classes()).toContain('test-dragging');
+
+    await div.trigger('dragend');
+    expect(div.classes()).not.toContain('test-dragging');
   });
 
   it('fails when no default slot provided', () => {
