@@ -1,6 +1,9 @@
 import { createApp } from 'vue';
-import DragAndDrop from '@/plugins/DragAndDrop';
+import DragAndDrop, { GlobalPredicate } from '@/plugins/DragAndDrop';
 import App from './App.vue';
 import router from './router';
 
-createApp(App).use(router).use(DragAndDrop).mount('#app');
+const dndGlobalPredicate: GlobalPredicate = (dropZone: Element, draggable: Element) =>
+  dropZone.getAttribute('data-idx') === draggable.getAttribute('data-idx');
+
+createApp(App).use(router).use(DragAndDrop, dndGlobalPredicate).mount('#app');

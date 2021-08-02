@@ -53,13 +53,5 @@ export default defineComponent({
 <style lang="scss">
 .dnd-draggable {
   cursor: pointer;
-  background: beige;
-
-  &.dnd-dragging {
-    background: #505050;
-    & > * {
-      visibility: hidden;
-    }
-  }
 }
 </style>

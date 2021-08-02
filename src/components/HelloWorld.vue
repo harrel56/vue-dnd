@@ -1,10 +1,10 @@
 <template>
-  <div class="flex">
-    <DropZone v-for="column in columns" :key="column.title" dropping-class="my-dropping">
-      <div class="dropzone">
+  <div class="workspace">
+    <DropZone v-for="(column, idx) in columns" :key="idx" dropping-class="dropping">
+      <div class="dropzone" :data-idx="idx + 1">
         <h2>{{ column.title }}</h2>
-        <Draggable v-for="element in column.elements" :key="element" dragging-class="my-dragging">
-          <div class="draggable">
+        <Draggable v-for="element in column.elements" :key="element" dragging-class="dragging">
+          <div class="draggable" :data-idx="element">
             <p>{{ element }}</p>
           </div>
         </Draggable>
@@ -24,9 +24,9 @@ export default defineComponent({
   setup() {
     return {
       columns: [
-        { title: 'Zone 1', elements: ['1', '2', '3', '4'] },
-        { title: 'Zone 2', elements: ['1'] },
-        { title: 'Zone 3', elements: ['1', '2'] }
+        { title: 'Zone 1', elements: [1, 2, 3, 4] },
+        { title: 'Zone 2', elements: [1] },
+        { title: 'Zone 3', elements: [1, 2] }
       ]
     };
   }
@@ -34,7 +34,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.flex {
+.workspace {
   width: 100%;
   height: calc(100% - 30px);
   display: flex;
@@ -45,8 +45,33 @@ export default defineComponent({
   padding: 30px;
 }
 
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 220px;
+  min-height: 85vh;
+  gap: 20px;
+  background: gray;
+  padding: 10px;
+  border-radius: 5px;
+
+  &.dropping {
+    background: #505050;
+    outline: dashed black;
+  }
+}
+
 .draggable {
   width: 200px;
   height: 100px;
+  background: beige;
+
+  &.dragging {
+    background: #505050;
+    & > * {
+      visibility: hidden;
+    }
+  }
 }
 </style>

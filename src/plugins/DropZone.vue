@@ -23,8 +23,8 @@ export default defineComponent({
         return;
       }
 
-      const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`);
-      if (!dropZone) {
+      const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`) as Element;
+      if (!store.globalPredicate(dropZone, store.currentDraggable)) {
         return;
       }
 
@@ -33,7 +33,7 @@ export default defineComponent({
         dropZone.classList.add(...droppingClasses);
       } else if (e.target !== dropZone) {
         const swapChild = e.target.closest(`.${classNames.DRAGGABLE}`)!;
-        if (!swapChild) {
+        if (!swapChild || swapChild === store.currentDraggable) {
           return;
         }
 
@@ -51,9 +51,13 @@ export default defineComponent({
         return;
       }
 
+      const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`) as Element;
+      if (!store.globalPredicate(dropZone, store.currentDraggable)) {
+        return;
+      }
+
       store.dropZoneCounter--;
-      const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`);
-      if (dropZone && store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone && store.dropZoneCounter === 0) {
+      if (store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone && store.dropZoneCounter === 0) {
         dropZone.classList.remove(...droppingClasses);
       }
     };
@@ -63,8 +67,12 @@ export default defineComponent({
         return;
       }
 
-      const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`);
-      if (dropZone && store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
+      const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`) as Element;
+      if (!store.globalPredicate(dropZone, store.currentDraggable)) {
+        return;
+      }
+
+      if (store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
         dropZone.append(store.currentDraggable);
         dropZone.classList.remove(...droppingClasses);
       }
@@ -86,22 +94,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style lang="scss">
-.dnd-dropzone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 220px;
-  min-height: 85vh;
-  gap: 20px;
-  background: gray;
-  padding: 10px;
-  border-radius: 5px;
-
-  &.dnd-dropping {
-    background: #505050;
-    outline: dashed black;
-  }
-}
-</style>
