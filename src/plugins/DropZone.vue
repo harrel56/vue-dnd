@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, getCurrentInstance, Slots, Slot, h } from 'vue';
+import { defineComponent, getCurrentInstance, Slots, Slot, h, ref, Ref } from 'vue';
 import { DragAndDropStore, SafeDragEvent, classNames } from '@/plugins/DragAndDrop';
 
 export default defineComponent({
@@ -17,6 +17,7 @@ export default defineComponent({
     }
     const droppingClasses = props.droppingClass == null ? [classNames.DROPPING] : [classNames.DROPPING, props.droppingClass];
     const store = getCurrentInstance()?.appContext.config.globalProperties.$dragAndDropStore as DragAndDropStore;
+    const selfRef = ref() as Ref<HTMLElement>;
 
     const onDragEnter = (e: SafeDragEvent) => {
       if (!store.currentDraggable) {
@@ -24,10 +25,11 @@ export default defineComponent({
       }
 
       const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`) as Element;
-      if (!store.globalPredicate(dropZone, store.currentDraggable)) {
+      if (dropZone !== selfRef.value || !store.globalPredicate(dropZone, store.currentDraggable)) {
         return;
       }
 
+      console.log('dragEnter: ' + selfRef.value.className);
       store.dropZoneCounter++;
       if (store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
         dropZone.classList.add(...droppingClasses);
@@ -52,10 +54,11 @@ export default defineComponent({
       }
 
       const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`) as Element;
-      if (!store.globalPredicate(dropZone, store.currentDraggable)) {
+      if (dropZone !== selfRef.value || !store.globalPredicate(dropZone, store.currentDraggable)) {
         return;
       }
 
+      console.log('dragLeave');
       store.dropZoneCounter--;
       if (store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone && store.dropZoneCounter === 0) {
         dropZone.classList.remove(...droppingClasses);
@@ -68,10 +71,11 @@ export default defineComponent({
       }
 
       const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`) as Element;
-      if (!store.globalPredicate(dropZone, store.currentDraggable)) {
+      if (dropZone !== selfRef.value || !store.globalPredicate(dropZone, store.currentDraggable)) {
         return;
       }
 
+      console.log('drop');
       if (store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
         dropZone.append(store.currentDraggable);
         dropZone.classList.remove(...droppingClasses);
@@ -85,6 +89,7 @@ export default defineComponent({
     const defaultSlot = slots.default as Slot;
     return () =>
       h(defaultSlot()[0], {
+        ref: selfRef,
         class: classNames.DROP_ZONE,
         ondragenter: onDragEnter,
         ondragleave: onDragLeave,

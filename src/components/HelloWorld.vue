@@ -1,16 +1,20 @@
 <template>
-  <div class="workspace">
-    <DropZone v-for="(column, idx) in columns" :key="idx" dropping-class="dropping">
-      <div class="dropzone" :data-idx="idx + 1">
-        <h2>{{ column.title }}</h2>
-        <Draggable v-for="element in column.elements" :key="element" dragging-class="dragging">
-          <div class="draggable" :data-idx="element">
-            <p>{{ element }}</p>
+  <DropZone>
+    <div class="workspace">
+      <Draggable v-for="(column, idx) in columns" :key="idx">
+        <DropZone dropping-class="dropping">
+          <div class="dropzone" :data-idx="idx + 1">
+            <h2>{{ column.title }}</h2>
+            <Draggable v-for="element in column.elements" :key="element" dragging-class="dragging">
+              <div class="draggable" :data-idx="element">
+                <p>{{ element }}</p>
+              </div>
+            </Draggable>
           </div>
-        </Draggable>
-      </div>
-    </DropZone>
-  </div>
+        </DropZone>
+      </Draggable>
+    </div>
+  </DropZone>
 </template>
 
 <script lang="ts">

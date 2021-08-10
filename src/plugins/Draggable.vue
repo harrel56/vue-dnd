@@ -2,12 +2,27 @@
 import { defineComponent, getCurrentInstance, Slots, Slot, h } from 'vue';
 import { DragAndDropStore, SafeDragEvent, classNames } from '@/plugins/DragAndDrop';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noOp = () => {};
+
 export default defineComponent({
   name: 'Draggable',
   props: {
     draggingClass: {
       type: String,
       default: null
+    },
+    onDragStart: {
+      type: Function,
+      default: noOp
+    },
+    onDrag: {
+      type: Function,
+      default: noOp
+    },
+    onDragEnd: {
+      type: Function,
+      default: noOp
     }
   },
   setup(props, { slots }: { slots: Slots }) {
@@ -22,18 +37,21 @@ export default defineComponent({
     const dragStart = (e: SafeDragEvent) => {
       store.dropZoneCounter = 0;
       store.currentDraggable = e.target;
+      props.onDragStart(e.target);
     };
 
-    const drag = () => {
+    const drag = (e: SafeDragEvent) => {
       if (store.currentDraggable) {
         store.currentDraggable.classList.add(...draggingClasses);
+        props.onDrag(e.target);
       }
     };
 
-    const dragEnd = () => {
+    const dragEnd = (e: SafeDragEvent) => {
       if (store.currentDraggable) {
         store.currentDraggable.classList.remove(...draggingClasses);
         store.currentDraggable = null;
+        props.onDragEnd(e.target);
       }
     };
 
