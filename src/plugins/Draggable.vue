@@ -35,7 +35,6 @@ export default defineComponent({
     const store = getCurrentInstance()?.appContext.config.globalProperties.$dragAndDropStore as DragAndDropStore;
 
     const dragStart = (e: SafeDragEvent) => {
-      store.dropZoneCounter = 0;
       store.currentDraggable = e.target;
       props.onDragStart(e.target);
     };
@@ -51,6 +50,7 @@ export default defineComponent({
       if (store.currentDraggable) {
         store.currentDraggable.classList.remove(...draggingClasses);
         store.currentDraggable = null;
+        store.currentDropZone = null;
         props.onDragEnd(e.target);
       }
     };

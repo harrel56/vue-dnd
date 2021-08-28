@@ -19,65 +19,55 @@ export default defineComponent({
     const store = getCurrentInstance()?.appContext.config.globalProperties.$dragAndDropStore as DragAndDropStore;
     const selfRef = ref() as Ref<HTMLElement>;
 
+    const shouldProcessEvent = (currentDraggable: Element | null, closestDropZone: Element): currentDraggable is Element =>
+      currentDraggable != null && closestDropZone === selfRef.value && store.globalPredicate(closestDropZone, currentDraggable);
+
     const onDragEnter = (e: SafeDragEvent) => {
-      if (!store.currentDraggable) {
-        return;
-      }
-
+      const { currentDraggable } = store;
       const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`) as Element;
-      if (dropZone !== selfRef.value || !store.globalPredicate(dropZone, store.currentDraggable)) {
+      if (!shouldProcessEvent(currentDraggable, dropZone)) {
         return;
       }
 
-      console.log('dragEnter: ' + selfRef.value.className);
-      store.dropZoneCounter++;
-      if (store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
+      store.currentDropZone = e.target === dropZone ? null : dropZone;
+      if (currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
         dropZone.classList.add(...droppingClasses);
       } else if (e.target !== dropZone) {
         const swapChild = e.target.closest(`.${classNames.DRAGGABLE}`)!;
-        if (!swapChild || swapChild === store.currentDraggable) {
+        if (!swapChild || swapChild === currentDraggable) {
           return;
         }
 
         const children = Array.from(dropZone.children);
-        if (children.indexOf(store.currentDraggable) > children.indexOf(swapChild)) {
-          swapChild.before(store.currentDraggable);
+        if (children.indexOf(currentDraggable) > children.indexOf(swapChild)) {
+          swapChild.before(currentDraggable);
         } else {
-          swapChild.after(store.currentDraggable);
+          swapChild.after(currentDraggable);
         }
       }
     };
 
     const onDragLeave = (e: SafeDragEvent) => {
-      if (!store.currentDraggable) {
-        return;
-      }
-
+      const { currentDraggable } = store;
       const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`) as Element;
-      if (dropZone !== selfRef.value || !store.globalPredicate(dropZone, store.currentDraggable)) {
+      if (!shouldProcessEvent(currentDraggable, dropZone)) {
         return;
       }
 
-      console.log('dragLeave');
-      store.dropZoneCounter--;
-      if (store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone && store.dropZoneCounter === 0) {
+      if (e.target === dropZone && store.currentDropZone !== dropZone) {
         dropZone.classList.remove(...droppingClasses);
       }
     };
 
     const onDrop = (e: SafeDragEvent) => {
-      if (store.currentDraggable === null) {
-        return;
-      }
-
+      const { currentDraggable } = store;
       const dropZone = e.target.closest(`.${classNames.DROP_ZONE}`) as Element;
-      if (dropZone !== selfRef.value || !store.globalPredicate(dropZone, store.currentDraggable)) {
+      if (!shouldProcessEvent(currentDraggable, dropZone)) {
         return;
       }
 
-      console.log('drop');
-      if (store.currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
-        dropZone.append(store.currentDraggable);
+      if (currentDraggable.closest(`.${classNames.DROP_ZONE}`) !== dropZone) {
+        dropZone.append(currentDraggable);
         dropZone.classList.remove(...droppingClasses);
       }
     };

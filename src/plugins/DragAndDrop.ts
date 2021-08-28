@@ -4,7 +4,7 @@ export type GlobalPredicate = (dropZone: Element, draggable: Element) => boolean
 
 export interface DragAndDropStore {
   currentDraggable: Element | null;
-  dropZoneCounter: number;
+  currentDropZone: Element | null;
   globalPredicate: GlobalPredicate;
 }
 
@@ -23,7 +23,7 @@ export default (app: App, globalPredicate = (() => true) as GlobalPredicate): vo
   // eslint-disable-next-line no-param-reassign
   app.config.globalProperties.$dragAndDropStore = {
     currentDraggable: null,
-    dropZoneCounter: 0,
+    currentDropZone: null,
     globalPredicate
   } as DragAndDropStore;
 };

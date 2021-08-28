@@ -3,7 +3,7 @@ module.exports = {
   env: {
     node: true
   },
-  extends: ['plugin:vue/vue3-recommended', '@vue/airbnb', '@vue/typescript/recommended'],
+  extends: ['plugin:vue/vue3-recommended', '@vue/airbnb', '@vue/typescript/recommended', 'eslint-config-prettier'],
   parserOptions: {
     ecmaVersion: 2020
   },
