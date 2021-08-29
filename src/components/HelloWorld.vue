@@ -1,9 +1,9 @@
 <template>
-  <DropZone>
+  <DropZone dropping-class="dropping">
     <div class="workspace">
-      <Draggable v-for="(column, idx) in columns" :key="idx">
+      <Draggable v-for="(column, idx) in columns" :key="idx" dragging-class="dragging">
         <DropZone dropping-class="dropping">
-          <div class="dropzone" :data-idx="idx + 1">
+          <div class="column" :data-idx="idx + 1">
             <h2>{{ column.title }}</h2>
             <Draggable v-for="element in column.elements" :key="element" dragging-class="dragging">
               <div class="draggable" :data-idx="element">
@@ -47,9 +47,14 @@ export default defineComponent({
   gap: 80px;
   background: darkgrey;
   padding: 30px;
+
+  &.dropping {
+    background: #42b983;
+    outline: dashed black;
+  }
 }
 
-.dropzone {
+.column {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -63,6 +68,13 @@ export default defineComponent({
   &.dropping {
     background: #505050;
     outline: dashed black;
+  }
+
+  &.dragging {
+    background: #505050;
+    & > * {
+      visibility: hidden;
+    }
   }
 }
 
