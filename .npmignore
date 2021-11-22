@@ -12,5 +12,6 @@ tests
 .prettierrc
 chromedriver.log
 jest.config.js
-README.md
+.travis.yml
+.codecov.yml
 

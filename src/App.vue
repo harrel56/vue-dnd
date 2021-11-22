@@ -1,17 +1,50 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view />
+  <DropZone dropping-class="dropping">
+    <div class="workspace">
+      <Draggable v-for="(column, idx) in columns" :key="idx" dragging-class="dragging">
+        <DropZone dropping-class="dropping">
+          <div class="column" :data-idx="idx + 1">
+            <h2>{{ column.title }}</h2>
+            <Draggable v-for="element in column.elements" :key="element" dragging-class="dragging">
+              <div class="draggable" :data-idx="element">
+                <p>{{ element }}</p>
+              </div>
+            </Draggable>
+          </div>
+        </DropZone>
+      </Draggable>
+    </div>
+  </DropZone>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Draggable from '@/plugins/Draggable.vue';
+import DropZone from '@/plugins/DropZone.vue';
+
+export default defineComponent({
+  name: 'App',
+  components: { DropZone, Draggable },
+  setup() {
+    return {
+      columns: [
+        { title: 'Zone 1', elements: [1, 2, 3, 4] },
+        { title: 'Zone 2', elements: [1] },
+        { title: 'Zone 3', elements: [1, 2] }
+      ]
+    };
+  }
+});
+</script>
 
 <style lang="scss">
 body {
-  background: #2c3e50;
+  margin: 0;
+  height: 100vh;
 }
 
 #app {
+  height: 100%;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -19,20 +52,56 @@ body {
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
+.workspace {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 80px;
+  background: darkgrey;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+  &.dropping {
+    background: #42b983;
+    outline: dashed black;
+  }
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
+.column {
+  margin: 30px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 220px;
+  max-height: 85vh;
+  gap: 20px;
+  background: gray;
+  padding: 10px;
+  border-radius: 5px;
+
+  &.dropping {
+    background: #505050;
+    outline: dashed black;
+  }
+
+  &.dragging {
+    background: #505050;
+    & > * {
+      visibility: hidden;
     }
   }
 }
 
-p {
-  margin: 0;
+.draggable {
+  width: 200px;
+  height: 100px;
+  background: beige;
+
+  &.dragging {
+    background: #505050;
+    & > * {
+      visibility: hidden;
+    }
+  }
 }
 </style>

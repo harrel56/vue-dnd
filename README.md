@@ -1,36 +1,22 @@
 [![codecov](https://codecov.io/gh/harrel56/vuela/branch/master/graph/badge.svg?token=82DE91AQ1Z)](https://codecov.io/gh/harrel56/vuela) [![Build Status](https://travis-ci.com/harrel56/vuela.svg?branch=master)](https://travis-ci.com/harrel56/vuela)
 
-# vuela
+# vue-dnd
 
-## Project setup
-```
-npm install
-```
+Simple vue 3.x drag and drop plugin
 
-### Compiles and hot-reloads for development
+## Example
+```html
+<DropZone>
+  <div class="z1">
+    <Draggable><div class="d1"></div></Draggable>
+    <Draggable><div class="d2"></div></Draggable>
+    <Draggable><div class="d3"></div></Draggable>
+  </div>
+</DropZone>
+<DropZone dropping-class="test-dropping">
+  <div class="z2">
+    <Draggable><div class="d1"></div></Draggable>
+    <Draggable><div class="d2"></div></Draggable>
+  </div>
+</DropZone>
 ```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Run your end-to-end tests
-```
-npm run test:e2e
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
