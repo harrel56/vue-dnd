@@ -1,0 +1,16 @@
+.idea
+coverage
+dist
+node_modules
+public
+tests
+
+.browserslistrc
+.editorconfig
+.eslintrc.js
+.gitignore
+.prettierrc
+chromedriver.log
+jest.config.js
+README.md
+
